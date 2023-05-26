@@ -6,6 +6,14 @@
 
 当面の間は入門者より既にPharoを使ってる方向けの情報共有Wikiとして記載してきます。
 
+### Wikiの表示
+
+こちらのWikiはGithub pagesとして提供しています。
+
+Githubからたどり着かれた方は下記からご覧ください。
+
+- [Github pagesで表示](https://pharo-open-documentation-jp.github.io)
+
 ## 配布場所
 
 - [公式配布場所](https://pharo.org/download)
@@ -17,12 +25,13 @@
 ## 機能紹介と説明
 
 - [環境](contents/description/environment.md)
-  - IceBerg
+  - Icerberg
   - Baseline
   - など
 - [言語&Library](contents/description/language-library.md)
   - Trait
   - Slot
+  - 並列処理
   - など
 
 ## 知識
@@ -42,7 +51,7 @@
 
 ## 入門者向け
 
-<未作成>
+＜未作成＞
 
 ## 関連
 
