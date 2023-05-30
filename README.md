@@ -25,7 +25,7 @@ Githubからたどり着かれた方は下記からご覧ください。
 ## 機能紹介と説明
 
 - [環境](contents/description/environment.md)
-  - Icerberg
+  - Iceberg
   - Baseline
   - など
 - [言語&Library](contents/description/language-library.md)
