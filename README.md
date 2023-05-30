@@ -60,3 +60,10 @@ Githubからたどり着かれた方は下記からご覧ください。
 - [Web](https://pharo.org)
 - [GitHub](https://github.com/pharo-project/pharo)
 - [Discord](https://discord.gg/XCF69vw6WZ)
+
+### こちらのWikiについてのお問い合わせ
+
+ゆくゆくは編集方針などもWiki内に記載する予定ですが、
+当分の間は下記のPharoのDiscordにお問い合わせください。
+
+- [Discord](https://discord.com/channels/223421264751099906/994495187348893716)
