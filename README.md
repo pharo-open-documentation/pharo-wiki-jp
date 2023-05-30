@@ -12,7 +12,7 @@
 
 Githubからたどり着かれた方は下記からご覧ください。
 
-- [Github pagesで表示](https://pharo-open-documentation-jp.github.io)
+- [Github pagesで表示](https://pharo-open-documentation.github.io/pharo-wiki-jp/)
 
 ## 配布場所
 
