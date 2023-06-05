@@ -10,7 +10,7 @@
 | ---------- | ---------- | ------------ |---- |
 | 代入             | :=        | =           | | |
 | 式の区切り        | ,      | ;           | | |
-| Messageの連続送信 | ; | ( 該当なし ) | 詳しくは "Message式にて" 後述 |
+| Messageの連続送信 | ; | ( 該当なし ) | 詳しくは "Message式" にて後述 |
 | 復帰文           | ^ 0.     |  return 0;  | 後述するBlockの値を返すためには使えないため一部異なります。 |
 | 局所変数宣言      | \| value \| | int value; | Pharoの変数にはintやlongといった型はありません。 |
 | 注記            | "注記" | /* 注記 */ | |
@@ -29,11 +29,11 @@
 | 真偽値              | true / false       | true / false   |    |
 | 値無し              | nil                | nullptr / null |    |
 
+
 |                    | Pharo              | C++         | C#/Java | 備考 |
 | --------  | ------------------ |  ---------- | ------- |---- |
 | 定数配列 　| #( 1 $a 'b' #c d ) | std::array< int, 3 >{ 1, 2, 3 } | new int[]{ 1, 2, 3 }  | 定数のみ格格納可能で「d」のような文字は識別子に変換します。変数同様型はありません。 |
-| Byte配列 | #[ 16rF0 16rF1 ] | std::array< std::byte, 2 >{ 0xF0, 0xF1 } | new byte[]{ 0xF0, 0xF1 } | 1要素 1byteの配列です。 |
-|
+| Byte配列 | #[ 16rF0 16rF1 ] | std::array< std::byte, 2 >{ 0xF0, 0xF1 } | new byte[]{ 0xF0, 0xF1 } | 1要素 1byteの配列です。 ||
 
 ### Message式
 
@@ -49,6 +49,7 @@
 | 単項                |     1 | object asInteger    | object.AsInteger()   |    |
 | 複数項( 引数1個の例 ) |     3 | object at: 1        | object.At( 1 )       |    |
 | 複数項( 引数2個の例 ) |     3 | object at: 1 put: 2 | object.AtPut( 1, 2 ) |    |
+
 
 |       | 優先度 | Pharo               | C++/C#             | 備考 |
 | ----- | ----- | ------------------- | ------------------ | ---- |
