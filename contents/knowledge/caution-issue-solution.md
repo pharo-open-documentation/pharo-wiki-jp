@@ -37,3 +37,7 @@
 #### Pharo 9
 
 Headless VMで動かせばPharoIMが使えるはずです。
+
+## 関連記事
+
+- [記事一覧](../../README.md)
