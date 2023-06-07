@@ -103,7 +103,6 @@ collection
     add:    3.
 ```
 
-
 ### 構文糖
 
 一部のMessage式に対する簡易構文です。
@@ -111,7 +110,6 @@ collection
 |       | Pharo              | C++         | C# / Java | 備考 |
 | ----- | ------------------ |  ---------- | ------- |---- |
 | 配列 | { 1 + a. 2. } | std::array< int, 3 >{ 1 + a, 2 } | new int[]{ 1 + a, 2 }  | "Array with: ( 1 + a ) with: 2" の簡易構文です。 |
-
 
 ### Block
 
