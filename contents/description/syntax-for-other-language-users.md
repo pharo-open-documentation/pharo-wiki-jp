@@ -91,7 +91,7 @@ collection
     add:    3.
 ```
 
-( 1 )
+( 2 )
 ```smalltalk
 collection
     add:    1.
