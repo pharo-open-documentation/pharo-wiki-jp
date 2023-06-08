@@ -137,6 +137,16 @@ collection
     add:    3.
 ```
 
+### Pragma
+
+後述する処理方法に付与する識別情報兼付加情報です。Pragmaを処理方法につけると統合開発環境やその他の機能がその処理方法を特別扱いできるようになります。
+例えば```< script >```がclass側の処理方法についていればGUIから処理方法の名前を選ぶだけで、処理方法を実行できます。
+Paragmaは単項Messageまたは多項Messageを```"<"```と```">"```で囲んだ形式になっています。
+
+|       | Pharo                  | C#                       | Java                  | 備考  |
+| ----- | ---------------------- | ------------------------ | --------------------- | ---- |
+| 単項   | ```< script >```       | ```[ Script ]```         | ```@Script```         |      |
+| 多項   | ```< primitive: 1 >``` | ```[ Primitive( 1 ) ]``` | ```@Primitive( 1 )``` |      |
 
 ### 処理方法( Method )の記述
 
@@ -200,18 +210,19 @@ int Between( int aMinInteger, int aMaxInteger )
 ```smalltalk
 valueWithin:    aDuration
 onTimeout:      timeoutBlock
+    "↑( 5 )"
 
-	< debuggerCompleteToSender >          "<- ( 1 )"
-	| theProcess delay watchdog tag |     "<- ( 2 )"
+	< debuggerCompleteToSender >          "<- ( 2 )"
+	| theProcess delay watchdog tag |     "<- ( 3 )"
 
 	aDuration <= Duration zero
-		ifTrue: [ ^ timeoutBlock value ]. "<- ( 3 )"
+		ifTrue: [ ^ timeoutBlock value ]. "<- ( 4 )"
 
 	theProcess := Processor activeProcess.
 	delay := aDuration asDelay.
 	tag := self.
 
-    "↓( 4 )"
+    "↓( 5 )"
 	watchdog :=
 	[
 		delay wait.
@@ -249,13 +260,11 @@ onTimeout:      timeoutBlock
 		]
 ```
 
-( 1 ) 
-
-( 2 ) 変数宣言はBlockの先頭を除いて式の途中で書くことはできません。式より先に書く必要があります。
-
-( 3 ) 復帰文が実行された場合、Blockの中にあってもBlockを抜けるだけで止まりません。処理方法の実行も中止して抜けます。Blockだけを中止して抜けたい場合は```thisContext```を使う必要があります。
-
-( 4 ) 途中に出てくる```"["```と```"]"```は全てBlockになります。あらゆる制御構文はMessage式とBlockと復帰文からなり、純粋な言語機能としてはそれ以外の制御構文はありません。
+- ( 1 ) Selectorに引数を挟んだものが処理方法の名前になります。この名前もSelectorと言い、先頭に書く必要があります。
+- ( 2 ) PragmaはSelectorの次に書きます。Pragmaは必要なだけ複数書くことができます。
+- ( 3 ) 変数宣言はBlockの先頭を除いて式の途中で書くことはできません。Pragmaよりは後で式より先に書く必要があります。
+- ( 4 ) 復帰文が実行された場合、Blockの中にあってもBlockを抜けるだけで止まりません。処理方法の実行も中止して抜けます。Blockだけを中止して抜けたい場合は```thisContext```を使う必要があります。
+- ( 5 ) 途中に出てくる```"["```と```"]"```は全てBlockになります。あらゆる制御構文はMessage式とBlockと復帰文からなり、純粋な言語機能としてはそれ以外の制御構文はありません。
 
 ## 半言語機能
 
