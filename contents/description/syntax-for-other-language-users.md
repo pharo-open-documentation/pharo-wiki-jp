@@ -35,9 +35,39 @@
 | 定数配列　| #( 1 $a 'b' #c d ) | std::array< int, 3 >{ 1, 2, 3 } 　　　　| new int[]{ 1, 2, 3 }　　　  | 定数のみ格格納可能で「d」のような文字は識別子に変換します。変数同様型はありません。 |
 | Byte配列 | #[ 16rF0 16rF1 ] | std::array< std::byte, 2 >{ 0xF0, 0xF1 } | new byte[]{ 0xF0, 0xF1 } | 1要素 1byteの配列です。 |
 
+
+### 構文糖
+
+一部のMessage式( 後述 )に対する簡易構文です。
+
+|       | Pharo              | C++         | C# / Java | 備考 |
+| ----- | ------------------ |  ---------- | ------- |---- |
+| 配列 | { 1 + a. 2. } | std::array< int, 3 >{ 1 + a, 2 } | new int[]{ 1 + a, 2 }  | "Array with: ( 1 + a ) with: 2" の簡易構文です。 |
+
+### Block
+
+一般に無名関数と呼ばれるものになります。ただしBlockの場合、関数ではなくobjectになっており、"["と"]"の間に書いた処理をただ実行するだけでなく、Blockだけで複数の機能を持っています。
+
+|         | Pharo       | C++         　　　　　　　　　　　　　| C# 　　　　　| Java 　　　　　　　　　| 備考 |
+| ------- | ---------- |  -------------------------------- | ---------- | -------------------　| ---- |
+| 引数なし | [ 0 ]       | \[\]\(\){ return 0; }            | () => 0 　　| () -> { return 0; } |  |
+| 引数あり | [ :x \| x ] | \[\]\( auto x \){ return value } | ( x ) => x | ( x ) -> { return x; } |  |
+
+### 特殊変数
+
+|                  | Pharo | C++              | C# / Java   | 備考 |
+| ---------------- | ----- | ---------------- | ----------- | ---- |
+| 自己参照          | self  | this              | this       |      | 
+| 基底( 派生元 )参照 | super | ( 基底型名 )       | super      |      | 
+| 実行状態          | thisContext | ( 該当なし ) | ( 該当なし ) |     |
+
+#### thisContext についての補足
+
+thisContext は呼び出し履歴や局所変数、引数などMessage送信の階層が持つ様々な情報を参照できる疑似変数です。また、Message送信の階層と一対となっており、送信元で変数に保存しておいたthisContextを受信者側で使うことにより3階層上の送信元に制御を巻き戻したりすることができます。
+
 ### Message式
 
-他言語における関数呼び出しに相当します。ただし関数と異なり同じ名前の呼び出し先が存在しているとは限りません。
+後述する処理方法を起動する構文で、他言語における関数呼び出しに相当します。ただし関数と異なり同じ名前の処理方法が存在しているとは限りません。
 
 - 単項・2項・複数項の3種類に分かれており、その3種類で優先度が異なります。
 - 下記の "asInteger" "at:put:" "+" といった名前に相当する部分をSelectorと言います。
@@ -107,36 +137,125 @@ collection
     add:    3.
 ```
 
-### 構文糖
 
-一部のMessage式に対する簡易構文です。
+### 処理方法( Method )の記述
 
-|       | Pharo              | C++         | C# / Java | 備考 |
-| ----- | ------------------ |  ---------- | ------- |---- |
-| 配列 | { 1 + a. 2. } | std::array< int, 3 >{ 1 + a, 2 } | new int[]{ 1 + a, 2 }  | "Array with: ( 1 + a ) with: 2" の簡易構文です。 |
+Pharoで定義する処理方法は必ずclassに属します。
+C++側の関数はclassの表記を省略しています。
+Pharoにはvoidに相当する戻り値はなく、復帰文を省略した場合はselfを返します。
 
-### Block
+#### ■Pharoによる記述例
 
-一般に無名関数と呼ばれるものになります。ただしBlockの場合、関数ではなくobjectになっており、"["と"]"の間に書いた処理をただ実行するだけでなく、Blockだけで複数の機能を持っています。
+単項
+```smalltalk
+isString
 
-|         | Pharo       | C++         　　　　　　　　　　　　　| C# 　　　　　| Java 　　　　　　　　　| 備考 |
-| ------- | ---------- |  -------------------------------- | ---------- | -------------------　| ---- |
-| 引数なし | [ 0 ]       | \[\]\(\){ return 0; }            | () => 0 　　| () -> { return 0; } |  |
-| 引数あり | [ :x \| x ] | \[\]\( auto x \){ return value } | ( x ) => x | ( x ) -> { return x; } |  |
+    ^ false.
+```
 
-### 特殊変数
+2項
+```smalltalk
+>= anInteger
 
-|                  | Pharo | C++              | C# / Java   | 備考 |
-| ---------------- | ----- | ---------------- | ----------- | ---- |
-| 自己参照          | self  | this              | this       |      | 
-| 基底( 派生元 )参照 | super | ( 基底型名 )       | super      |      | 
-| 実行状態          | thisContext | ( 該当なし ) | ( 該当なし ) |     |
+    ^ anInteger <= self.
+```
 
-#### thisContext についての補足
+多項
+```smalltalk
+between:    aMinInteger
+and:        aMaxInteger
 
-thisContext は呼び出し履歴や局所変数、引数などMessage送信の階層が持つ様々な情報を参照できる疑似変数です。また、Message送信の階層と一対となっており、送信元で変数に保存しておいたthisContextを受信者側で使うことにより3階層上の送信元に制御を巻き戻したりすることができます。
+	^ self >= aMinInteger
+        and: [ self <= aMaxInteger ]
+```
 
-＜現在作成中です＞
+#### ■上記に相当するC++の記述
+
+単項
+```cpp
+bool IsString()
+{
+    return false;
+}
+```
+
+2項
+```cpp
+bool operator >= ( int anInteger )
+{
+    return anInteger <= *this;
+}
+```
+
+多項
+```cpp
+int Between( int aMinInteger, int aMaxInteger )
+{
+    return *this >= aMinInteger && *this <= aMaxInteger;
+}
+```
+
+#### ■より複雑な記述例
+
+```smalltalk
+valueWithin:    aDuration
+onTimeout:      timeoutBlock
+
+	< debuggerCompleteToSender >          "<- ( 1 )"
+	| theProcess delay watchdog tag |     "<- ( 2 )"
+
+	aDuration <= Duration zero
+		ifTrue: [ ^ timeoutBlock value ]. "<- ( 3 )"
+
+	theProcess := Processor activeProcess.
+	delay := aDuration asDelay.
+	tag := self.
+
+    "↓( 4 )"
+	watchdog :=
+	[
+		delay wait.
+		theProcess
+			ifNotNil:
+			[
+				theProcess signalException: (TimedOut new tag: tag)
+			]
+	] newProcess.
+
+	watchdog priority: Processor timingPriority - 1.
+
+	^
+	[
+		watchdog resume.
+		self
+            ensure:
+		    [
+			    theProcess := nil.
+		    	delay delaySemaphore signal.
+		    ]
+	]
+		on: TimedOut
+		do:
+		[ :exception |
+			exception tag == tag
+				ifTrue:
+				[
+					timeoutBlock value
+				]
+				ifFalse:
+				[
+					exception pass
+				]
+		]
+```
+
+( 1 ) 
+
+( 2 ) 変数宣言はBlockの先頭を除いて式の途中で書くことはできません。式より先に書く必要があります。
+
+( 3 ) 復帰文が実行された場合、Blockの中にあってもBlockを抜けるだけで止まりません。処理方法の実行も中止して抜けます。Blockだけを中止して抜けたい場合は```thisContext```を使う必要があります。
+
+( 4 ) 途中に出てくる```"["```と```"]"```は全てBlockになります。あらゆる制御構文はMessage式とBlockと復帰文からなり、純粋な言語機能としてはそれ以外の制御構文はありません。
 
 ## 半言語機能
 
