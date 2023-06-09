@@ -163,7 +163,7 @@ isString
     ^ false.
 ```
 
-2項
+二項
 ```smalltalk
 >= anInteger
 
@@ -189,7 +189,7 @@ bool IsString()
 }
 ```
 
-2項
+二項
 ```cpp
 bool operator >= ( int anInteger )
 {
