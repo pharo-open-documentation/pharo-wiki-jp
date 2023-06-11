@@ -183,7 +183,7 @@ and:        aMaxInteger
 #### ■上記に相当するC#の記述例
 
 単項
-```C#
+```CSharp
 bool IsString()
 {
     return false;
@@ -191,7 +191,7 @@ bool IsString()
 ```
 
 二項
-```C#
+```CSharp
 bool operator >= ( int anInteger )
 {
     return anInteger <= this;
@@ -199,7 +199,7 @@ bool operator >= ( int anInteger )
 ```
 
 多項
-```C#
+```CSharp
 int Between( int aMinInteger, int aMaxInteger )
 {
     return this >= aMinInteger && this <= aMaxInteger;
@@ -211,7 +211,7 @@ int Between( int aMinInteger, int aMaxInteger )
 ```smalltalk
 valueWithin:    aDuration
 onTimeout:      timeoutBlock
-    "↑( 5 )"
+    "↑( 1 )"
 
 	< debuggerCompleteToSender >          "<- ( 2 )"
 	| theProcess delay watchdog tag |     "<- ( 3 )"
@@ -295,7 +295,7 @@ isString
 
 #### ■上記に相当するC#の記述例
 
-```C#
+```CSharp
 class Some:
 	Object
 {
@@ -314,7 +314,8 @@ class Some:
 #### 特性( Trait )
 
 特性はPharoにおいて多重継承を実現するための仕組みです。
-実装を複数のClassで共有できて多重継承でき、objectを作れないという点においてC#やJavaのinterfaceと類似しているため比較対象としてinterfaceをあげています。しかし実態としては真逆の関係です。
+実装を複数のClassで共有できて多重継承でobjectを作れません。
+C#やJavaのinterfaceと類似しているため比較対象としてinterfaceをあげています。しかし実態としては真逆の関係です。
 interfaceは元々文字通りinterfaceを定義するもので実装を提供しませんが、Traitは実装の提供を目的としたものになります。
 
 #### ■Pharoによる記述例
@@ -336,7 +337,7 @@ isString
 
 #### ■上記に相当するC#の記述例
 
-```C#
+```CSharp
 interface TSome
 {
 	bool IsString()
