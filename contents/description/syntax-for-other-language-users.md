@@ -2,7 +2,7 @@
 
 他言語の知識がある方向けの比較表になります。
 
-## 純言語機能
+## 純粋言語機能
 
 ### 基礎構文
 
@@ -71,6 +71,7 @@ thisContext は呼び出し履歴や局所変数、引数などMessage送信の�
 
 - 単項・二項・多項の3種類に分かれており、その3種類で優先度が異なります。
 - 下記の "asInteger" "at:put:" "+" といった名前に相当する部分をSelectorと言います。
+- Selectorは識別子として実装しているため"#at:put"と識別子形式で表現します。
 - 下記の "object" に相当する部分を受信者( Receiver )と言います。
 - 下記の "at: 1 put: 2" など受信者を除いた部分をMessageと言います。Messageはその部分だけを保存したりできます。
 
@@ -179,10 +180,10 @@ and:        aMaxInteger
         and: [ self <= aMaxInteger ]
 ```
 
-#### ■上記に相当するC++の記述
+#### ■上記に相当するC#の記述例
 
 単項
-```cpp
+```C#
 bool IsString()
 {
     return false;
@@ -190,18 +191,18 @@ bool IsString()
 ```
 
 二項
-```cpp
+```C#
 bool operator >= ( int anInteger )
 {
-    return anInteger <= *this;
+    return anInteger <= this;
 }
 ```
 
 多項
-```cpp
+```C#
 int Between( int aMinInteger, int aMaxInteger )
 {
-    return *this >= aMinInteger && *this <= aMaxInteger;
+    return this >= aMinInteger && this <= aMaxInteger;
 }
 ```
 
@@ -266,11 +267,108 @@ onTimeout:      timeoutBlock
 - ( 4 ) 復帰文が実行された場合、Blockの中にあってもBlockを抜けるだけで止まりません。処理方法の実行も中止して抜けます。Blockだけを中止して抜けたい場合は```thisContext```を使う必要があります。
 - ( 5 ) 途中に出てくる```"["```と```"]"```は全てBlockになります。あらゆる制御構文はMessage式とBlockと復帰文からなり、純粋な言語機能としてはそれ以外の制御構文はありません。
 
-## 半言語機能
+## 準言語機能
 
-準言語機能の上に作られた言語機能です。
+Message送信と処理方法およびBlockの組み合わせで作られている機能です。
 
-＜現在作成中です＞
+### Class登録
+
+多くの言語ではClassは静的に宣言するものですが、Pharoでは実行時に環境に登録する形となります。そのため反復で大量のClassを登録したり削除できます。
+
+#### ■Pharoによる記述例
+
+```smalltalk
+Object
+	subclass: 				#Some
+	instanceVariableNames:　'one two'
+	classVariableNames: 	'three four'
+	package: 				'Example'
+```
+
+下記はC#との比較用の処理手順でClassを登録する上では必須ではありません。
+
+```smalltalk
+isString
+
+    ^ false.
+```
+
+#### ■上記に相当するC#の記述例
+
+```C#
+class Some:
+	Object
+{
+	// 仮にintとしていますが、Pharoの方は型はありません
+	// 変数は全てprotectedになります。
+	protected int 			one, two;
+	protected static int 	three, four;
+
+	public bool IsString()
+	{
+		return true;
+	}
+}
+```
+
+#### 特性( Trait )
+
+特性はPharoにおいて多重継承を実現するための仕組みです。
+実装を複数のClassで共有できて多重継承でき、objectを作れないという点においてC#やJavaのinterfaceと類似しているため比較対象としてinterfaceをあげています。しかし実態としては真逆の関係です。
+interfaceは元々文字通りinterfaceを定義するもので実装を提供しませんが、Traitは実装の提供を目的としたものになります。
+
+#### ■Pharoによる記述例
+
+```smalltalk
+Trait
+	named: 					#TSome
+	instanceVariableNames:	''
+	package: 				'Example'
+```
+
+下記はC#との比較用の処理手順で特性を登録する上では必須ではありません。
+
+```smalltalk
+isString
+
+    ^ false.
+```
+
+#### ■上記に相当するC#の記述例
+
+```C#
+interface TSome
+{
+	bool IsString()
+	{
+		return true;
+	}
+}
+```
+
+#### ■Traitsを使う場合のClass登録
+
+■上記のTSomeを取り込む場合
+
+```smalltalk
+Object
+	subclass: 				#Some
+	uses: 					TSome "「uses:」が増えます。"
+	instanceVariableNames:　'one two'
+	classVariableNames: 	'three four'
+	package: 				'Example'
+```
+
+■複数のTraitを取り込む場合
+
+```smalltalk
+Object
+	subclass: 				#Some
+	uses: 					TSome1 + TSome2
+	instanceVariableNames:　'one two'
+	classVariableNames: 	'three four'
+	package: 				'Example'
+```
 
 ## 関連記事
 
