@@ -370,6 +370,10 @@ Object
 	package: 				'Example'
 ```
 
+## 制御系Message
+
+＜作成中です＞
+
 ## 関連記事
 
 - [記事一覧](../../README.md)
