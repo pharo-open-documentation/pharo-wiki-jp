@@ -141,7 +141,7 @@ collection
 ### Pragma
 
 後述する処理方法に付与する識別情報兼付加情報です。Pragmaを処理方法につけると統合開発環境やその他の機能がその処理方法を特別扱いできるようになります。
-例えば```< script >```がclass側の処理方法についていればGUIから処理方法の名前を選ぶだけで、その処理を実行できます。
+例えば```< script >```が級( Class )側の処理方法についていればGUIから処理方法の名前を選ぶだけで、その処理を実行できます。
 Paragmaは単項Messageまたは多項Messageを```"<"```と```">"```で囲んだ形式になっています。
 
 |       | Pharo                  | C#                       | Java                  | 備考  |
@@ -151,7 +151,7 @@ Paragmaは単項Messageまたは多項Messageを```"<"```と```">"```で囲ん�
 
 ### 処理方法( Method )の記述
 
-Pharoで定義する処理方法は必ずclassに属します。
+Pharoで定義する処理方法は必ず級に属します。
 C++側の関数はclassの表記を省略しています。
 Pharoにはvoidに相当する戻り値はなく、復帰文を省略した場合はselfを返します。
 
@@ -271,9 +271,9 @@ onTimeout:      timeoutBlock
 
 Message送信と処理方法およびBlockの組み合わせで作られている機能です。
 
-### Class登録
+### 級( Class )の登録
 
-多くの言語ではClassは静的に宣言するものですが、Pharoでは実行時に環境に登録する形となります。そのため反復で大量のClassを登録したり削除できます。
+多くの言語では級( Class )は静的に宣言するものですが、Pharoでは実行時に環境に登録する形となります。そのため反復で大量の級を登録したり削除できます。
 
 #### ■Pharoによる記述例
 
@@ -285,7 +285,7 @@ Object
 	package: 				'Example'
 ```
 
-下記はC#との比較用の処理手順でClassを登録する上では必須ではありません。
+下記はC#との比較用の処理手順で級を登録する上では必須ではありません。
 
 ```smalltalk
 isString
@@ -314,9 +314,9 @@ class Some:
 #### 特性( Trait )
 
 特性はPharoにおいて多重継承を実現するための仕組みです。
-実装を複数のClassで共有できて多重継承でobjectを作れません。
-C#やJavaのinterfaceと類似しているため比較対象としてinterfaceをあげています。しかし実態としては真逆の関係です。
-interfaceは元々文字通りinterfaceを定義するもので実装を提供しませんが、Traitは実装の提供を目的としたものになります。
+特性を級に取り込むことにより複数の級で同じ実装を共有できます。特性からobjectを作ることはできません。
+C#やJavaのinterfaceと類似しているため比較対象としてinterfaceをあげています。しかし実態としては真逆の関係となります。
+interfaceは元々文字通りinterfaceを定義するもので実装を提供しませんが、特性は実装の提供を目的としたものになります。
 
 #### ■Pharoによる記述例
 
@@ -347,7 +347,7 @@ interface TSome
 }
 ```
 
-#### ■Traitsを使う場合のClass登録
+#### ■特性を使う場合の級の登録
 
 ■上記のTSomeを取り込む場合
 
@@ -360,7 +360,7 @@ Object
 	package: 				'Example'
 ```
 
-■複数のTraitを取り込む場合
+■複数の特性を取り込む場合
 
 ```smalltalk
 Object
@@ -373,7 +373,259 @@ Object
 
 ## 制御系Message
 
-＜作成中です＞
+### 分岐
+
+#### ■Pharoによる記述例
+
+```smalltalk
+true
+	ifTrue:
+	[
+		self
+			traceCr:	'True'.
+	]
+	ifFalse:
+	[
+		self
+			traceCr:	'False'.
+	]
+```
+
+#### ■上記に相当するC#の記述例
+
+```CSharp
+if( true )
+{
+	Console.WriteLine( "True" );
+}
+else
+{
+	Console.WriteLine( "False" );
+}
+```
+
+#### ※注意※
+
+これまでも準言語機能やmessageと書いている通り、Pharoの制御は純粋な制御構文ではありません。
+分岐を正確に他の言語で書くと下記のようになります。
+分岐以外も同様になりますのでご注意ください。
+
+#### ■Pharoによる記述例
+
+```smalltalk
+true
+	ifTrue:
+	[
+		1.
+	]
+	ifFalse:
+	[
+		-1.
+	]
+```
+
+#### ■上記に相当するC#の記述例
+
+C#のtrueにはIfが無いため仮にあったとすればという例になります。
+
+```CSharp
+true.If( () => 1, () => -1 );
+```
+
+### 分岐( switch )
+
+Pharoにも#caseOf:というものが存在しましたが、
+非推奨となっているため省略します。
+Pharoでは連想配列やobjectの多態性で代用してください。
+
+### 反復
+
+#### 列挙
+
+##### ■Pharoによる記述例
+
+```smalltalk
+#( 1 2 3 4 )
+	do:
+	[ :each |
+	]
+```
+
+##### ■上記に相当するC#の記述例
+
+```CSharp
+foreach( var each in new int[]{ 1, 2, 3 } )
+{
+}
+```
+
+#### 条件付き
+
+##### ■Pharoによる記述例
+
+```smalltalk
+[
+	true
+]
+	whileTrue:
+	[
+	]
+```
+
+##### ■上記に相当するC++/C#/Javaの記述例
+
+```CSharp
+while( true )
+{
+}
+```
+
+#### 無条件
+
+##### ■Pharoによる記述例
+
+```smalltalk
+[
+] repeat.
+```
+
+##### ■上記に相当するC++/C#/Javaの記述例
+
+```CSharp
+for( ;; )
+{
+}
+```
+
+#### 反復からの脱出
+
+##### ■Pharoによる記述例
+
+```smalltalk
+|
+	label
+|
+
+label := thisContext.
+
+#( 1 2 3 4 )
+	do:
+	[ :each |
+		3 < each
+			ifTrue:
+			[
+				label resume.
+			] 
+	]
+```
+
+##### ■上記に相当するJavaの記述例
+
+```Java
+label: for( var each : new int[]{ 1, 2, 3, 4 } )
+{
+	if( 3 < each )
+	{
+		break label;
+	}
+}
+```
+
+Pharoには性能改善のため、一部のmessageを軽量な中間言語に展開してしまいます。
+(例：[] repeat, ifTrue:[] ifFalse:[])
+これらのmessageの中では上記は脱出先と脱出元が同じになってしまいうまく動作しません。
+```smalltalk
+[ [  ] repeat ] value
+```
+という形で脱出したいblockを展開されないblockで囲むか、後述する継続を使います。
+なお展開するmessageは「Setting Browser」の「Compiler」から「Inline」と書かれているところでどれを展開するか選択できます。
+
+### 継続
+
+#### ■Pharoによる記述例
+
+```smalltalk
+Continuation
+	currentDo:
+	[ :label |
+		self
+			traceCr: 'one'.
+		label
+			value: 0. "ここでblockを抜ける。以降の処理は実行しない。0は戻り値となる"
+		self
+			traceCr: 'two'.
+	]
+```
+
+#### ■上記に相当する他言語での記述例
+
+＜作成中＞
+
+### 生成式
+
+#### ■Pharoによる記述例
+
+```smalltalk
+|
+	readStream
+|
+
+readStream :=
+	Generator
+		on:
+		[ :writeStream |
+			writeStream
+				nextPut: 0.
+			writeStream
+				nextPut: 1.
+			writeStream
+				nextPut: 2. "nextを2回しか送ってないのでここで止まる"
+		].
+
+readStream next. "-> 0"
+readStream next. "-> 1"
+```
+
+#### ■上記に相当する他言語での記述例
+
+＜作成中＞
+
+### 例外
+
+#### ■Pharoによる記述例
+
+```smalltalk
+[
+	ZeroDivide
+		signal: 'message'
+]
+	on: Error, Notification
+	do:
+	[ :exception |
+	].
+```
+
+#### ■上記に相当するJavaの記述例
+
+```Java
+try
+{
+	throw new ZeroDivide( "message" );
+}
+catch( Error | Notification exception )
+{
+}
+```
+
+大まかな動きはほぼ同じですが、いくつか違いがあるので注意が必要です。
+Pharoの例外は例外を投げた地点から処理を継続するか#on:do:に指定したblockで判断する想定の設計になっています。
+このため#on:do:に指定したblockを実行している時点では処理手順を巻き戻しません。
+例外発生地点が排他制御の中にある場合、他言語の感覚では#on:do:に指定したblockに入れば排他制御を抜けていると思いがちですが、排他制御からは抜けていません。
+他言語のように処理手順を呼び出し元まで巻き戻しながら処理したい場合は、#ifCurtailed:を使います。
+finallyと同様の処理をしたい場合は#ensure:を使います。
+
+Pharoの例外は異常( Error )と通知( Notification )の2種類に別れます。
+異常は他の言語と同様ですが、通知はやや特殊な動きをします。通知は#on:#do:で例外を捕まえなかった場合、例外発生地点からそのまま処理を継続します。
 
 ## 関連記事
 
