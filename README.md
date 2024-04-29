@@ -22,7 +22,8 @@ Githubからたどり着かれた方は下記からご覧ください。
 
 - 2024-4-26 [Pharo12を正式公開しました。](https://pharo.org/news/2024-04-26-pharo12-released.html)
 - 2023-5-24 [Pharo11を正式公開しました。](https://pharo.org/news/pharo11-released.html)
-  - いくつか重大な不具合がありますので[注意事項・既知の不具合・困ったときの対処法](contents/knowledge/caution-issue-solution.md)も御覧ください。
+  - 警告：実行中に頻繁に停止する不具合があるため当WikiではPharo10の使用をおすすめします。
+  - [注意事項・既知の不具合・困ったときの対処法](contents/knowledge/caution-issue-solution.md)も御覧ください。
 
 ## 機能紹介と説明
 
@@ -53,7 +54,7 @@ Githubからたどり着かれた方は下記からご覧ください。
 
 ## 入門者向け
 
-＜未作成＞
+＜この節は加筆が望まれています＞
 
 ## 関連
 
@@ -65,7 +66,8 @@ Githubからたどり着かれた方は下記からご覧ください。
 
 ### こちらのWikiについてのお問い合わせ
 
-ゆくゆくは編集方針などもWiki内に記載する予定ですが、
-当分の間は下記のPharoのDiscordにお問い合わせください。
+- [編集方針](contents/contribute/policy.md)
+
+それ以外についてはPharoのDiscordにお問い合わせください。
 
 - [Discord](https://discord.com/channels/223421264751099906/994495187348893716)
